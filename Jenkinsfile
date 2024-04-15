@@ -22,7 +22,7 @@ pipeline {
                     def imageName = "yourdockerhubusername/socialmedia-website:${env.BUILD_NUMBER}"
                     // Login to DockerHub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                        sh "echo ${DOCKERHUB_PASS} | docker login --username ${DOCKERHUB_USER} --password-stdin"
+                        sh "docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS docker.io"
                     }
                     // Push the image
                     sh "docker push ${imageName}"
