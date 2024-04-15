@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout SCM') {
             steps {  
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/muhammadhur2/socialmedia-website.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/muhammadhur2/kubernetes-tutorial.git'
             }
         }
         stage('Build Docker Image') {
