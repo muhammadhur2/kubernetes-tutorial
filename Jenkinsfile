@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     // Define the image name and tag, typically using the Jenkins build number or other unique identifiers
-                    def imageName = "yourdockerhubusername/socialmedia-website:${env.BUILD_NUMBER}"
+                    def imageName = "muhammadhur/tutorial:${env.BUILD_NUMBER}"
                     // Build the Docker image
                     sh "docker build -t ${imageName} ."
                 }
@@ -19,7 +19,7 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    def imageName = "yourdockerhubusername/socialmedia-website:${env.BUILD_NUMBER}"
+                    def imageName = "muhammadhur/tutorial:${env.BUILD_NUMBER}"
                     // Login to DockerHub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                         sh "docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS docker.io"
