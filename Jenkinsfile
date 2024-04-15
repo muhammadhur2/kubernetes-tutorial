@@ -9,9 +9,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Define the image name and tag, typically using the Jenkins build number or other unique identifiers
                     def imageName = "muhammadhur/tutorial:${env.BUILD_NUMBER}"
-                    // Build the Docker image
                     sh "docker build -t ${imageName} ."
                 }
             }
@@ -20,14 +18,22 @@ pipeline {
             steps {
                 script {
                     def imageName = "muhammadhur/tutorial:${env.BUILD_NUMBER}"
-                    // Login to DockerHub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                         sh "docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS docker.io"
                     }
-                    // Push the image
                     sh "docker push ${imageName}"
-                    // Logout from DockerHub to secure the session
                     sh "docker logout"
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Update the image in the deployment YAML file
+                    def imageName = "muhammadhur/tutorial:${env.BUILD_NUMBER}"
+                    sh "sed -i 's|muhammadhur/tutorial:latest|${imageName}|' ./deployment.yaml"
+                    // Apply the deployment
+                    sh "kubectl apply -f ./deployment.yaml"
                 }
             }
         }
