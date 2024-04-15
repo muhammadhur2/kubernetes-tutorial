@@ -33,7 +33,9 @@ pipeline {
                     def imageName = "muhammadhur/tutorial:${env.BUILD_NUMBER}"
                     sh "sed -i 's|muhammadhur/tutorial:latest|${imageName}|' ./deployment.yaml"
                     // Apply the deployment
-                    sh "kubectl apply -f ./deployment.yaml"
+                    withCredentials([file(credentialsId: 'kube', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f ./deployment.yaml'
+}
                 }
             }
         }
